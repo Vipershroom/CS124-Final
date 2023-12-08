@@ -1,8 +1,6 @@
 import pygame
-from variables import *
-from sprites import *
 from scenemanager import scene_manager
-
+from variables import window
 pygame.init()
 screen = pygame.display.set_mode(window)
 

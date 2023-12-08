@@ -1,6 +1,6 @@
 import pygame
-import mainmenu
-from variables import *
+from mainmenu import MainMenu
+from level1 import level1
 
 def scene_manager(scene: pygame.Surface, new_scene: str):
     
@@ -9,9 +9,9 @@ def scene_manager(scene: pygame.Surface, new_scene: str):
 
     match new_scene:
         case "Menu":
-            return mainmenu.MainMenu(scene)
+            return MainMenu(scene)
         case "Start":
-            exit()
+            return level1(scene)
         case "Scores":
             exit()
         case "Quit":
