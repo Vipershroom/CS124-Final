@@ -12,3 +12,7 @@ def scene_manager(scene: pygame.Surface, new_scene: str):
             return mainmenu.MainMenu(scene)
         case "Start":
             exit()
+        case "Scores":
+            exit()
+        case "Quit":
+            exit()

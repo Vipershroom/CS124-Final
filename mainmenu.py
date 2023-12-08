@@ -3,12 +3,12 @@ from variables import *
 from sprites import *
 
 def MainMenu(screen):
-    # Main menu
 
+    # Main menu
     clock = pygame.time.Clock()
 
     # Initialize background
-    bg = pygame.transform.scale(pygame.image.load('assets/background/sky.png'), window).convert()
+    bg = pygame.transform.scale(pygame.image.load('assets/background/shrine.png'), window).convert()
     font = pygame.font.SysFont('MS Mincho', 50)
     text = font.render('Game Title', False, 'White')
     menu_buttons = pygame.sprite.Group()
@@ -51,7 +51,8 @@ def MainMenu(screen):
                 # Broadcasts which button was pressed
                 if events.key == pygame.K_RETURN:
                     return menu_buttons.sprites()[current_active].Broadcast()
-        # Main menu
+                
+        # Render
         screen.blit(bg, (0,0))
         screen.blit(text, (200,100))
         menu_buttons.draw(screen)
