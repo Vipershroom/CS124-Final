@@ -2,12 +2,18 @@ import pygame
 # from pygame.sprite import _Group
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, screen=None):
         super().__init__()
-        self.image = pygame.image.load('assets/player')
+        self.image = pygame.draw.circle(screen,"Red", (200,200), 10.)
         self.rect = self.image.get_rect(center = (200,200))
+    
+    def move(self):
+        pass
+
+
 
 class Button(pygame.sprite.Sprite):
+
     def __init__(self, text, pos) -> None:
         super().__init__()
         self.color = "#454647"
@@ -16,6 +22,7 @@ class Button(pygame.sprite.Sprite):
         self.image = self.font.render(text, False, self.color)
         self.rect = self.image.get_rect(midbottom = pos)
         self.active = False
+
     def redraw(self):
         if self.active:
             self.color = "#f5f7fa"
