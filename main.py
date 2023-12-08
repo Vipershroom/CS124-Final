@@ -2,9 +2,11 @@ import pygame
 from variables import *
 from sprites import *
 from scenemanager import scene_manager
-pygame.init()
 
+pygame.init()
 screen = pygame.display.set_mode(window)
+
+# Default Scene 
 scene_tag = "Menu"
 
 # Transition scene
