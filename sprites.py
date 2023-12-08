@@ -4,7 +4,7 @@ import pygame
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load('assets/player/circle.png'), (100,100)).convert_alpha()
+        self.image = pygame.transform.scale(pygame.image.load('assets/player/reimu.png'), (255,145)).convert_alpha()
         self.rect = self.image.get_rect(center = (200,600))
         self.velX = 0
         self.velY = 0
@@ -31,6 +31,27 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velX
         self.rect.y += self.velY
 
+    def parse_spritesheet_row(self, x,y, width, height, row):
+
+        sprite = pygame.Surface((width,height))
+        sprite.set_colorkey((0,0,0))
+        sprite.blit(self.image, (0,0), (x,y,width,height))
+
+        if row < 0:
+            return [sprite]
+        
+        if row - 4 <= 0:
+            return [sprite] + self.parse_spritesheet_row(x + width, y, width, height, row -1)
+
+        return [sprite] + self.parse_spritesheet_row(x + width, y, width, height, row -1)
+    
+    def get_full_spritesheet(self, x,y, width, height, row, col):
+        sprite_list = []
+        for _ in range(col):
+            sprite_list += [self.parse_spritesheet_row(x,y,width,height, row)]
+        return sprite_list
+
+        
 
 
 class Button(pygame.sprite.Sprite):

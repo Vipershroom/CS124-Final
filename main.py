@@ -5,7 +5,7 @@ pygame.init()
 screen = pygame.display.set_mode(window)
 
 # Default Scene 
-scene_tag = "Menu"
+scene_tag = "Start"
 
 # Transition scene
 while True:
