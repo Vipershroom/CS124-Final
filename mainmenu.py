@@ -14,9 +14,9 @@ def MainMenu(screen):
     menu_buttons = pygame.sprite.Group()
 
     # Add buttons to Sprite Group
-    menu_buttons.add(Button("Start", (300,300)))
-    menu_buttons.add(Button("Scores", (300,400)))
-    menu_buttons.add(Button("Quit", (300,500)))
+    menu_buttons.add(Button("Start", (350,300)))
+    menu_buttons.add(Button("Scores", (350,400)))
+    menu_buttons.add(Button("Quit", (350,500)))
 
 
     # Start as default active
@@ -54,7 +54,7 @@ def MainMenu(screen):
                 
         # Render
         screen.blit(bg, (0,0))
-        screen.blit(text, (200,100))
+        screen.blit(text, (270,100))
         menu_buttons.draw(screen)
         pygame.display.update()
         clock.tick(60)
