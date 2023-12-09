@@ -99,13 +99,11 @@ class Bullet(pygame.sprite.Sprite):
     def move(self):
         self.rect.y -= self.speed
         self.rect = self.image.get_rect(center=self.rect.center)
-        print(self.rect.x, self.rect.y)
 
         if self.rect.y <= -50 or self.check_collision():
             self.kill()
     
     def check_collision(self):
-        print(self.rect.colliderect(Enemy().rect))
         return self.rect.collidepoint(Enemy().rect.midbottom)
         
 

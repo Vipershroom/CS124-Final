@@ -13,6 +13,7 @@ def level1(screen: pygame.Surface):
     idle = True
 
     bullets = pygame.sprite.Group()
+    bullets
 
     while True:
         for event in pygame.event.get():
@@ -20,7 +21,8 @@ def level1(screen: pygame.Surface):
                 exit()
             keys = pygame.key.get_pressed()
             if keys[pygame.K_z]:
-                bullets.add(Bullet((player.sprite.rect.center[0],player.sprite.rect.center[1] - 48)))
+                if len(bullets.sprites()) <= 50:
+                    bullets.add(Bullet((player.sprite.rect.center[0],player.sprite.rect.center[1] - 48)))
                 
             if keys[pygame.K_LEFT]:
                 player.sprite.left_pressed = True

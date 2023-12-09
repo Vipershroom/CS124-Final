@@ -3,7 +3,7 @@ from scenemanager import scene_manager
 from variables import window
 pygame.init()
 screen = pygame.display.set_mode(window)
-5
+55
 # Default Scene 
 scene_tag = "Start"
 
