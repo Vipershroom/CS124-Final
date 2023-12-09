@@ -96,12 +96,16 @@ class Bullet(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(pygame.image.load('assets/misc/player_shot.png'), (25,25)).convert_alpha()
         self.rect = self.image.get_rect(center = pos)
         self.speed = 4
+
     def move(self):
         self.rect.y -= self.speed
         self.rect = self.image.get_rect(center=self.rect.center)
 
-        if self.rect.y <= -10:
+        if self.rect.y <= -10 or self.check_collision():
             self.kill()
+    
+    def check_collision(self):
+        return self.rect.colliderect()
         
             
         
