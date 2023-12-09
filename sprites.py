@@ -90,7 +90,21 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(center=self.rect.center)
             
 
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, pos) -> None:
+        super().__init__()
+        self.image = pygame.transform.scale(pygame.image.load('assets/misc/player_shot.png'), (25,25)).convert_alpha()
+        self.rect = self.image.get_rect(center = pos)
+        self.speed = 4
+    def move(self):
+        self.rect.y -= self.speed
+        self.rect = self.image.get_rect(center=self.rect.center)
 
+        if self.rect.y <= -10:
+            self.kill()
+        
+            
+        
         
 
 
