@@ -56,6 +56,7 @@ class Player(pygame.sprite.Sprite):
         
         self.rect.x += self.velX
         self.rect.y += self.velY
+        self.rect = self.image.get_rect(center=self.rect.center)
 
 
     
