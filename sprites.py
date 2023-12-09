@@ -64,8 +64,8 @@ class Player(pygame.sprite.Sprite):
         print(len(self.sprite_sheet[0]))
         if self.current_sprite >= 8:
             self.current_sprite = 0
-        self.image = pygame.transform.scale(self.sprite_sheet[0][self.current_sprite], (50,70)).convert_alpha()
-        self.current_sprite += 1
+        self.image = pygame.transform.scale(self.sprite_sheet[0][int(self.current_sprite)], (50,70)).convert_alpha()
+        self.current_sprite += .2
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def direction_change():
