@@ -1,6 +1,4 @@
 import pygame
-from pygame.sprite import _Group
-# from pygame.sprite import _Group
 
 class Player(pygame.sprite.Sprite):
     
@@ -33,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.get_full_spritesheet(0,0,32,48, 8, 3)
         # self.sprite_sheet = []
         self.image = self.sprite_sheet[0][0]
-        self.rect = self.image.get_rect(center = (200,600))
+        self.rect = self.image.get_rect(center = (200,700))
         self.velX = 0
         self.velY = 0
         self.left_pressed = False
@@ -101,17 +99,21 @@ class Bullet(pygame.sprite.Sprite):
     def move(self):
         self.rect.y -= self.speed
         self.rect = self.image.get_rect(center=self.rect.center)
+        print(self.rect.x, self.rect.y)
 
-        if self.rect.y <= -10 or self.check_collision():
+        if self.rect.y <= -50 or self.check_collision():
             self.kill()
     
     def check_collision(self):
-        return self.rect.colliderect()
+        print(self.rect.colliderect(Enemy().rect))
+        return self.rect.collidepoint(Enemy().rect.midbottom)
         
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
+        self.image = pygame.image.load('assets/player/enemy.png')
+        self.rect = self.image.get_rect(center = (400, 200))
         
         
 
