@@ -1,4 +1,5 @@
 import pygame
+from pygame.sprite import _Group
 # from pygame.sprite import _Group
 
 class Player(pygame.sprite.Sprite):
@@ -107,7 +108,10 @@ class Bullet(pygame.sprite.Sprite):
     def check_collision(self):
         return self.rect.colliderect()
         
-            
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        super().__init__()
         
         
 
