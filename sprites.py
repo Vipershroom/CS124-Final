@@ -19,8 +19,10 @@ class Player(pygame.sprite.Sprite):
     
     def get_full_spritesheet(self, x,y, width, height, row, col):
         sprite_list = []
+        adder = 0
         for _ in range(col):
-            sprite_list += [self.parse_spritesheet_row(x,y,width,height, row)]
+            sprite_list += [self.parse_spritesheet_row(x,y + adder,width,height, row)]
+            adder += 48
         self.sprite_sheet = sprite_list
 
     def __init__(self):
@@ -61,15 +63,33 @@ class Player(pygame.sprite.Sprite):
 
     
     def idle_animation(self):
-        print(len(self.sprite_sheet[0]))
         if self.current_sprite >= 8:
             self.current_sprite = 0
         self.image = pygame.transform.scale(self.sprite_sheet[0][int(self.current_sprite)], (50,70)).convert_alpha()
         self.current_sprite += .2
         self.rect = self.image.get_rect(center=self.rect.center)
 
-    def direction_change():
-        pass
+    def direction_change(self,dir):
+        if dir == "left":
+            if self.current_sprite >= 7:
+                self.current_sprite = 7
+                self.image = pygame.transform.scale(self.sprite_sheet[1][int(self.current_sprite)], (50,70)).convert_alpha()
+                self.rect = self.image.get_rect(center=self.rect.center)
+                return
+            self.image = pygame.transform.scale(self.sprite_sheet[1][int(self.current_sprite)], (50,70)).convert_alpha()
+            self.current_sprite += .4
+            self.rect = self.image.get_rect(center=self.rect.center)
+        else:
+            if self.current_sprite >= 7:
+                self.current_sprite = 7
+                self.image = pygame.transform.scale(self.sprite_sheet[2][int(self.current_sprite)], (50,70)).convert_alpha()
+                self.rect = self.image.get_rect(center=self.rect.center)
+                return
+            self.image = pygame.transform.scale(self.sprite_sheet[2][int(self.current_sprite)], (50,70)).convert_alpha()
+            self.current_sprite += .4
+            self.rect = self.image.get_rect(center=self.rect.center)
+            
+
 
         
 
