@@ -5,6 +5,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.transform.scale(pygame.image.load('assets/player/reimu.png'), (255,145)).convert_alpha()
+        self.sprite_sheet = []
         self.rect = self.image.get_rect(center = (200,600))
         self.velX = 0
         self.velY = 0
@@ -15,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 4
         self.x = 100
         self.y = 100
+        self.current_sprite = 0
     
     def move(self):
         self.velX = 0
@@ -49,7 +51,17 @@ class Player(pygame.sprite.Sprite):
         sprite_list = []
         for _ in range(col):
             sprite_list += [self.parse_spritesheet_row(x,y,width,height, row)]
-        return sprite_list
+        self.sprite_sheet = sprite_list
+    
+    def idle_animation(self):
+        print(len(self.sprite_sheet[0]))
+        if self.current_sprite >= 8:
+            self.current_sprite = 0
+        self.image = self.sprite_sheet[0][self.current_sprite].convert_alpha()
+        self.current_sprite += 1
+
+    def direction_change():
+        pass
 
         
 

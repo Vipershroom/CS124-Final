@@ -10,8 +10,9 @@ def level1(screen: pygame.Surface):
     player = pygame.sprite.GroupSingle()
     player.add(Player())
 
+    idle = True
+
     sprite_sheet = player.sprite.get_full_spritesheet(0,0,32,48, 8, 3)
-    print(sprite_sheet)
 
     while True:
         for event in pygame.event.get():
@@ -35,14 +36,16 @@ def level1(screen: pygame.Surface):
                     player.sprite.up_pressed = False
                 if event.key == pygame.K_DOWN:
                     player.sprite.down_pressed = False
+
+            
         
         screen.blit(bg, (0,0))
-        rend_val = 1
-        for i in range(len(sprite_sheet)):
-            for k in range(len(sprite_sheet[i])):
-                screen.blit(pygame.transform.scale(sprite_sheet[i][k], (50,90)), (100 + k * 50, 100 * rend_val))
-            rend_val += 1
+
+
+
         player.draw(screen)
         player.sprite.move()
+        screen.blit(player.sprite.sprite_sheet[0][0], (100,100))
+        player.sprite.idle_animation()
         pygame.display.update()
         clock.tick(60)
