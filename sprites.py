@@ -134,14 +134,17 @@ class Enemy(Player):
         # print(self.pythagoras_distance(move_pattern[0], move_pattern[1]) <= (0, 0))
         if pythad_dist != 0:
             dir = self.direction(x,y)
+            # print("Path1", x,y)
+            # print("Path2", self.rect.x,self.rect.y )
+            print(pythad_dist)
             if dir[0] < 0 and self.vx > 0:
                 self.vx *= -1
             elif dir[0] > 0 and self.vx < 0:
-                self.vx *= 1
+                self.vx *= -1
             if dir[1] < 0 and self.vy > 0:
                 self.vy *= -1
             elif dir[1] > 0 and self.vy < 0:
-                self.vy *= 1
+                self.vy *= -1
 
             if self.rect.x != x:
                 self.rect.x += self.vx
@@ -153,7 +156,7 @@ class Enemy(Player):
         self.check_collide(group)
 
     def pythagoras_distance(self, x,y):
-        return sqrt((self.rect.x - x)**2 + (self.rect.y - y) ** 2)
+        return sqrt((x - self.rect.x)**2 + (y - self.rect.y) ** 2)
     
     def direction(self, x, y):
         return (x - self.rect.x , y - self.rect.y)
