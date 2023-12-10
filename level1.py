@@ -88,7 +88,7 @@ def level1(screen: pygame.Surface):
         for bullet in bullets.sprites():
             if bullet.type != len(bullets.sprites()) - 1:
                 bullet.draw(screen)
-        player.sprite.move()
+        player.sprite.move(bullet_enemy)
         player.sprite.idle_animation()
         for i in enemy.sprites():
             i.move(bullets)

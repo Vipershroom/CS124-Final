@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite):
         self.y = 100
         self.current_sprite = 0
     
-    def move(self):
+    def move(self, group):
         self.velX = 0
         self.velY = 0
         if self.left_pressed and not self.right_pressed:
@@ -59,6 +59,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velX
         self.rect.y += self.velY
         self.rect = self.image.get_rect(center=self.rect.center)
+
+        self.die(group)
 
 
     
@@ -88,6 +90,12 @@ class Player(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.sprite_sheet[2][int(self.current_sprite)], (50,70)).convert_alpha()
             self.current_sprite += .4
             self.rect = self.image.get_rect(center=self.rect.center)
+    
+    def die(self, group):
+        if pygame.sprite.spritecollide(self,group,dokill=False):
+            for i in pygame.sprite.spritecollide(self,group,dokill=False):
+                print("killed")
+                i.kill()
             
 
 class Bullet(pygame.sprite.Sprite):
@@ -183,7 +191,6 @@ class Enemy(Player):
         # print(self.shoot_num)
         if int(self.shoot_num) == 1:
             if should_shoot_rand == 1:
-                print("shot fired!")
                 group.add(Bullet(bullet_sprite,(self.rect.center[0],self.rect.center[1] - 48), len(group.sprites()) - 1,10,  -1))
                 self.shoot_num = 0
         else:
