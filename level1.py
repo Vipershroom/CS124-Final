@@ -16,12 +16,14 @@ def level1(screen: pygame.Surface):
     bullet_sprite = pygame.transform.scale(pygame.image.load('assets/misc/player_shot.png'), (25,25)).convert_alpha()
     bullets = pygame.sprite.Group()
 
-    bullet_enemy_sprite = ''
-    bullet_enemy = pygame.sprite.GroupSingle()
-    # move_pattern = [(i,0) for i in range(5)]
-    # move_pattern = [(200,400), (0,0)]
-    # enemy = pygame.sprite.Group()
-    # enemy.add(Enemy(move_pattern))
+    bullet_enemy_sprite = pygame.transform.scale(pygame.image.load('assets/misc/enemy_shot.png'), (25,25)).convert_alpha()
+    bullet_enemy = pygame.sprite.Group()
+    Bullet(bullet_sprite,(player.sprite.rect.center[0],player.sprite.rect.center[1] - 48), len(bullets.sprites()) - 1)
+    
+    wave1_complete = False
+    wave2_complete = False
+    wave3_complete = False
+
     enemy = wave1()
 
     while True:
@@ -81,6 +83,7 @@ def level1(screen: pygame.Surface):
 
         player.draw(screen)
         enemy.draw(screen)
+        bullet_enemy.draw(screen)
         
         for bullet in bullets.sprites():
             if bullet.type != len(bullets.sprites()) - 1:
@@ -89,7 +92,11 @@ def level1(screen: pygame.Surface):
         player.sprite.idle_animation()
         for i in enemy.sprites():
             i.move(bullets)
+            i.shoot(bullet_enemy_sprite,bullet_enemy)
         for i in bullets.sprites():
+            i.move()
+        
+        for i in bullet_enemy.sprites():
             i.move()
         
         pygame.display.update()
@@ -98,5 +105,13 @@ def level1(screen: pygame.Surface):
 def wave1():
     grp = pygame.sprite.Group()
     for i in range(6):
-        grp.add(Enemy([(random.randrange(100,600), random.randrange(100,300)) for _ in range(4)] + [(-50,-50)]))
+        grp.add(Enemy([(random.randrange(100,600), random.randrange(100,300)) for _ in range(4)] + [(-50,-50)], i * 20 ))
+        # grp.add(Enemy([(100, 500)] + [(-50,-50)]))
+        # grp.add(Enemy([(200, 600)] + [(-50,-50)]))
+    return grp
+
+def wave2():
+    grp = pygame.sprite.Group()
+    for i in range(6):
+        grp.add(Enemy([(random.randrange(100,600), random.randrange(100,300)) for _ in range(4)] + [(-50,-50)], i * 20 ))
     return grp

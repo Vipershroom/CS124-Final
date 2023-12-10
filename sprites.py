@@ -1,5 +1,6 @@
 import pygame
 from math import sqrt
+import random
 class Player(pygame.sprite.Sprite):
     
     def parse_spritesheet_row(self, x,y, width, height, row):
@@ -90,11 +91,11 @@ class Player(pygame.sprite.Sprite):
             
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, asset,pos, type) -> None:
+    def __init__(self, asset,pos, type, speed=20, dir=1) -> None:
         super().__init__()
         self.image = asset.convert_alpha()
         self.rect = self.image.get_rect(center = pos)
-        self.speed = 20
+        self.speed = speed * dir
         self.type = type
 
     def draw(self, screen):
@@ -109,34 +110,28 @@ class Bullet(pygame.sprite.Sprite):
         
 
 class Enemy(Player):
-    def __init__(self, move=[]) -> None:
+    def __init__(self,move=[], starty=0) -> None:
         super().__init__()
         self.sprites_image = pygame.image.load('assets/player/enemy.png')
         self.sheet_parse = self.parse_spritesheet_row(0,0, 31,32,12)
         self.image = pygame.transform.scale(self.sheet_parse[0], (40,50)).convert_alpha()
-        self.rect = self.image.get_rect(center = (400, 200))
+        self.rect = self.image.get_rect(center = (-20, starty))
         self.move_pattern = move
         self.move_state = 0
         self.complete_movement = True
         self.vx = 1
         self.vy = 1
         self.hp = 6
+        self.shoot_num = 0
 
-    def move(self, group):
+    def move(self, group_player_bullets):
         x = self.move_pattern[self.move_state][0]
         y = self.move_pattern[self.move_state][1]
 
         pythad_dist = self.pythagoras_distance(x, y)
-        # print(self.move_state)
-        # print(len(move_pattern))
-        
-        # print(self.pythagoras_distance(move_pattern[self.move_state][0], move_pattern[self.move_state][1]))
-        # print(self.pythagoras_distance(move_pattern[0], move_pattern[1]) <= (0, 0))
+
         if pythad_dist != 0:
             dir = self.direction(x,y)
-            # print("Path1", x,y)
-            # print("Path2", self.rect.x,self.rect.y )
-            print(pythad_dist)
             if dir[0] < 0 and self.vx > 0:
                 self.vx *= -1
             elif dir[0] > 0 and self.vx < 0:
@@ -150,10 +145,15 @@ class Enemy(Player):
                 self.rect.x += self.vx
             if self.rect.y != y:
                 self.rect.y += self.vy
+
+            self.rect = self.image.get_rect(center=self.rect.center)
         else:
             if self.move_state < len(self.move_pattern) -1:
                     self.move_state += 1
-        self.check_collide(group)
+
+        # self.shoot(bullet_sprite, group_enemy_bullets)
+
+        self.check_collide(group_player_bullets)
 
         if self.rect.x == -50 or self.rect.y == -50:
             self.kill()
@@ -177,6 +177,17 @@ class Enemy(Player):
 
     def death(self):
         self.kill()
+
+    def shoot(self,bullet_sprite, group):
+        should_shoot_rand = random.randint(0,50)
+        # print(self.shoot_num)
+        if int(self.shoot_num) == 1:
+            if should_shoot_rand == 1:
+                print("shot fired!")
+                group.add(Bullet(bullet_sprite,(self.rect.center[0],self.rect.center[1] - 48), len(group.sprites()) - 1,10,  -1))
+                self.shoot_num = 0
+        else:
+            self.shoot_num += (1/ 10)
         
 
 
