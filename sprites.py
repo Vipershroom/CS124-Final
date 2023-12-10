@@ -122,9 +122,9 @@ class Enemy(Player):
         self.vy = 1
         self.hp = 6
 
-    def move(self, move_pattern, group):
-        x = move_pattern[self.move_state][0]
-        y = move_pattern[self.move_state][1]
+    def move(self, group):
+        x = self.move_pattern[self.move_state][0]
+        y = self.move_pattern[self.move_state][1]
 
         pythad_dist = self.pythagoras_distance(x, y)
         # print(self.move_state)
@@ -148,12 +148,12 @@ class Enemy(Player):
             if self.rect.y != y:
                 self.rect.y += self.vy
         else:
-            if self.move_state < len(move_pattern) -1:
+            if self.move_state < len(self.move_pattern) -1:
                     self.move_state += 1
         self.check_collide(group)
 
     def pythagoras_distance(self, x,y):
-        return sqrt((self.rect.x - x) + (self.rect.y - y) ** 2)
+        return sqrt((self.rect.x - x)**2 + (self.rect.y - y) ** 2)
     
     def direction(self, x, y):
         return (x - self.rect.x , y - self.rect.y)

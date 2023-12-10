@@ -1,6 +1,7 @@
 import pygame
 from variables import window
 from sprites import Player, Bullet, Enemy
+import random
 def level1(screen: pygame.Surface):
     
     clock = pygame.time.Clock()
@@ -18,9 +19,10 @@ def level1(screen: pygame.Surface):
     bullet_enemy_sprite = ''
     bullet_enemy = pygame.sprite.GroupSingle()
     # move_pattern = [(i,0) for i in range(5)]
-    move_pattern = [(200,400), (0,0)]
-    enemy = pygame.sprite.Group()
-    enemy.add(Enemy(move_pattern))
+    # move_pattern = [(200,400), (0,0)]
+    # enemy = pygame.sprite.Group()
+    # enemy.add(Enemy(move_pattern))
+    enemy = wave1()
 
     while True:
         for event in pygame.event.get():
@@ -86,9 +88,15 @@ def level1(screen: pygame.Surface):
         player.sprite.move()
         player.sprite.idle_animation()
         for i in enemy.sprites():
-            i.move(move_pattern, bullets)
+            i.move(bullets)
         for i in bullets.sprites():
-            i.move(enemy)
+            i.move()
         
         pygame.display.update()
         clock.tick(60)
+
+def wave1():
+    grp = pygame.sprite.Group()
+    for i in range(6):
+        grp.add(Enemy([(random.randrange(100,600), random.randrange(100,300)) for _ in range(4)]))
+    return grp
