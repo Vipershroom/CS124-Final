@@ -19,7 +19,7 @@ def level1(screen: pygame.Surface):
     bullet_enemy = pygame.sprite.GroupSingle()
     # move_pattern = [(i,0) for i in range(5)]
     move_pattern = [(200,400), (0,0)]
-    enemy = pygame.sprite.GroupSingle()
+    enemy = pygame.sprite.Group()
     enemy.add(Enemy(move_pattern))
 
     while True:
@@ -79,13 +79,16 @@ def level1(screen: pygame.Surface):
 
         player.draw(screen)
         enemy.draw(screen)
-        enemy.sprite.move(move_pattern)
+        
         for bullet in bullets.sprites():
             if bullet.type != len(bullets.sprites()) - 1:
                 bullet.draw(screen)
         player.sprite.move()
         player.sprite.idle_animation()
+        for i in enemy.sprites():
+            i.move(move_pattern, bullets)
         for i in bullets.sprites():
             i.move(enemy)
+        
         pygame.display.update()
         clock.tick(60)

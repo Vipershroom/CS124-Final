@@ -100,15 +100,12 @@ class Bullet(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def move(self, group):
+    def move(self):
         self.rect.y -= self.speed
         self.rect = self.image.get_rect(center=self.rect.center)
 
-        if self.rect.y <= -50 or self.check_collision(group):
+        if self.rect.y <= -50:
             self.kill()
-    
-    def check_collision(self, group):
-        return pygame.sprite.spritecollide(self,group, dokill=False)
         
 
 class Enemy(Player):
@@ -123,8 +120,9 @@ class Enemy(Player):
         self.complete_movement = True
         self.vx = 1
         self.vy = 1
+        self.hp = 6
 
-    def move(self, move_pattern):
+    def move(self, move_pattern, group):
         x = move_pattern[self.move_state][0]
         y = move_pattern[self.move_state][1]
 
@@ -152,12 +150,27 @@ class Enemy(Player):
         else:
             if self.move_state < len(move_pattern) -1:
                     self.move_state += 1
+        self.check_collide(group)
 
     def pythagoras_distance(self, x,y):
         return sqrt((self.rect.x - x) + (self.rect.y - y) ** 2)
     
     def direction(self, x, y):
         return (x - self.rect.x , y - self.rect.y)
+    
+    def check_collide(self,group):
+        if pygame.sprite.spritecollide(self,group,dokill=False):
+            for i in pygame.sprite.spritecollide(self,group,dokill=False):
+                i.kill()
+            self.damage()
+
+    def damage(self):
+        self.hp -= 1
+        if self.hp == 0:
+            self.death()
+
+    def death(self):
+        self.kill()
         
 
 
