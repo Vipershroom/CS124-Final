@@ -14,6 +14,9 @@ def level1(screen: pygame.Surface):
 
     bullet_sprite = pygame.transform.scale(pygame.image.load('assets/misc/player_shot.png'), (25,25)).convert_alpha()
     bullets = pygame.sprite.Group()
+
+    bullet_enemy_sprite = ''
+    bullet_enemy = pygame.sprite.GroupSingle()
     # move_pattern = [(i,0) for i in range(5)]
     move_pattern = [(200,400), (0,0)]
     enemy = pygame.sprite.GroupSingle()
@@ -83,6 +86,6 @@ def level1(screen: pygame.Surface):
         player.sprite.move()
         player.sprite.idle_animation()
         for i in bullets.sprites():
-            i.move()
+            i.move(enemy)
         pygame.display.update()
         clock.tick(60)

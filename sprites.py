@@ -100,22 +100,23 @@ class Bullet(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-    def move(self):
+    def move(self, group):
         self.rect.y -= self.speed
         self.rect = self.image.get_rect(center=self.rect.center)
 
-        if self.rect.y <= -50 or self.check_collision():
+        if self.rect.y <= -50 or self.check_collision(group):
             self.kill()
     
-    def check_collision(self):
-        return self.rect.collidepoint(Enemy().rect.midbottom)
+    def check_collision(self, group):
+        return pygame.sprite.spritecollide(self,group, dokill=False)
         
 
 class Enemy(Player):
     def __init__(self, move=[]) -> None:
         super().__init__()
-        self.sheet = pygame.image.load('assets/player/enemy.png')
-        self.image = self.sheet
+        self.sprites_image = pygame.image.load('assets/player/enemy.png')
+        self.sheet_parse = self.parse_spritesheet_row(0,0, 31,32,12)
+        self.image = pygame.transform.scale(self.sheet_parse[0], (40,50)).convert_alpha()
         self.rect = self.image.get_rect(center = (400, 200))
         self.move_pattern = move
         self.move_state = 0
