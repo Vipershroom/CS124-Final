@@ -1,6 +1,6 @@
 import pygame
 from variables import window
-from sprites import Player, Bullet
+from sprites import Player, Bullet, Enemy
 def level1(screen: pygame.Surface):
     
     clock = pygame.time.Clock()
@@ -12,8 +12,11 @@ def level1(screen: pygame.Surface):
 
     idle = True
 
+    bullet_sprite = pygame.transform.scale(pygame.image.load('assets/misc/player_shot.png'), (25,25)).convert_alpha()
     bullets = pygame.sprite.Group()
-    bullets
+    # move_pattern = [(i,0) for i in range(5)]
+    move_pattern = (1,0)
+    Enemy().move(move_pattern)
 
     while True:
         for event in pygame.event.get():
@@ -21,8 +24,7 @@ def level1(screen: pygame.Surface):
                 exit()
             keys = pygame.key.get_pressed()
             if keys[pygame.K_z]:
-                if len(bullets.sprites()) <= 50:
-                    bullets.add(Bullet((player.sprite.rect.center[0],player.sprite.rect.center[1] - 48)))
+                bullets.add(Bullet(bullet_sprite,(player.sprite.rect.center[0],player.sprite.rect.center[1] - 48), len(bullets.sprites()) - 1))
                 
             if keys[pygame.K_LEFT]:
                 player.sprite.left_pressed = True
@@ -72,7 +74,11 @@ def level1(screen: pygame.Surface):
         
 
         player.draw(screen)
-        bullets.draw(screen)
+        # bullets.draw(screen)
+        for bullet in bullets.sprites():
+            if bullet.type != len(bullets.sprites()) - 1:
+                print(bullet.type)
+                bullet.draw(screen)
         player.sprite.move()
         player.sprite.idle_animation()
         for i in bullets.sprites():

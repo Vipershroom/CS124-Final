@@ -1,5 +1,5 @@
 import pygame
-
+from math import sqrt
 class Player(pygame.sprite.Sprite):
     
     def parse_spritesheet_row(self, x,y, width, height, row):
@@ -90,11 +90,15 @@ class Player(pygame.sprite.Sprite):
             
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, pos) -> None:
+    def __init__(self, asset,pos, type) -> None:
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load('assets/misc/player_shot.png'), (25,25)).convert_alpha()
+        self.image = asset.convert_alpha()
         self.rect = self.image.get_rect(center = pos)
-        self.speed = 4
+        self.speed = 20
+        self.type = type
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
     def move(self):
         self.rect.y -= self.speed
@@ -107,12 +111,24 @@ class Bullet(pygame.sprite.Sprite):
         return self.rect.collidepoint(Enemy().rect.midbottom)
         
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(Player):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load('assets/player/enemy.png')
+        self.sheet = pygame.image.load('assets/player/enemy.png')
+        self.image = self.sheet
         self.rect = self.image.get_rect(center = (400, 200))
-        
+        self.move_pattern = []
+        self.move_state = 0
+        self.complete_movement = True
+
+    def move(self, move_pattern):
+        if self.pythagoras_distance(move_pattern[0], move_pattern[1]) <= (0, 0):
+            dir = self.move_pattern[self.move_state]
+            self.rect.x = dir[0]
+            self.rect.y = dir[1]
+
+    def pythagoras_distance(self, x,y):
+        return (self.rect.x - x, self.rect.y - y)
         
 
 
