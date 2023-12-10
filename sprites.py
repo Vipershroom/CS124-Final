@@ -112,23 +112,51 @@ class Bullet(pygame.sprite.Sprite):
         
 
 class Enemy(Player):
-    def __init__(self) -> None:
+    def __init__(self, move=[]) -> None:
         super().__init__()
         self.sheet = pygame.image.load('assets/player/enemy.png')
         self.image = self.sheet
         self.rect = self.image.get_rect(center = (400, 200))
-        self.move_pattern = []
+        self.move_pattern = move
         self.move_state = 0
         self.complete_movement = True
+        self.vx = 1
+        self.vy = 1
 
     def move(self, move_pattern):
-        if self.pythagoras_distance(move_pattern[0], move_pattern[1]) <= (0, 0):
-            dir = self.move_pattern[self.move_state]
-            self.rect.x = dir[0]
-            self.rect.y = dir[1]
+        x = move_pattern[self.move_state][0]
+        y = move_pattern[self.move_state][1]
+
+        pythad_dist = self.pythagoras_distance(x, y)
+        # print(self.move_state)
+        # print(len(move_pattern))
+        
+        # print(self.pythagoras_distance(move_pattern[self.move_state][0], move_pattern[self.move_state][1]))
+        # print(self.pythagoras_distance(move_pattern[0], move_pattern[1]) <= (0, 0))
+        if pythad_dist != 0:
+            dir = self.direction(x,y)
+            if dir[0] < 0 and self.vx > 0:
+                self.vx *= -1
+            elif dir[0] > 0 and self.vx < 0:
+                self.vx *= 1
+            if dir[1] < 0 and self.vy > 0:
+                self.vy *= -1
+            elif dir[1] > 0 and self.vy < 0:
+                self.vy *= 1
+
+            if self.rect.x != x:
+                self.rect.x += self.vx
+            if self.rect.y != y:
+                self.rect.y += self.vy
+        else:
+            if self.move_state < len(move_pattern) -1:
+                    self.move_state += 1
 
     def pythagoras_distance(self, x,y):
-        return (self.rect.x - x, self.rect.y - y)
+        return sqrt((self.rect.x - x) + (self.rect.y - y) ** 2)
+    
+    def direction(self, x, y):
+        return (x - self.rect.x , y - self.rect.y)
         
 
 
