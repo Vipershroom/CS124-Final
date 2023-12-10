@@ -155,6 +155,9 @@ class Enemy(Player):
                     self.move_state += 1
         self.check_collide(group)
 
+        if self.rect.x == -50 or self.rect.y == -50:
+            self.kill()
+
     def pythagoras_distance(self, x,y):
         return sqrt((x - self.rect.x)**2 + (y - self.rect.y) ** 2)
     

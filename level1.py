@@ -98,5 +98,5 @@ def level1(screen: pygame.Surface):
 def wave1():
     grp = pygame.sprite.Group()
     for i in range(6):
-        grp.add(Enemy([(random.randrange(100,600), random.randrange(100,300)) for _ in range(4)]))
+        grp.add(Enemy([(random.randrange(100,600), random.randrange(100,300)) for _ in range(4)] + [(-50,-50)]))
     return grp
