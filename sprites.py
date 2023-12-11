@@ -43,6 +43,11 @@ class Player(pygame.sprite.Sprite):
         self.x = 100
         self.y = 100
         self.current_sprite = 0
+        self.dead = False
+        self.time1 = 0
+        self.time2 = 0
+        self.lives = 3
+        
     
     def move(self, group):
         self.velX = 0
@@ -59,8 +64,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.velX
         self.rect.y += self.velY
         self.rect = self.image.get_rect(center=self.rect.center)
-
+        self.time1 = pygame.time.get_ticks()
+        # print(self.time1 - self.time2)
         self.die(group)
+        if self.dead and self.time1 - self.time2 > 500:
+            print(self.time1 - self.time2)
+            self.dead = False
+            print(self.dead)
 
 
     
@@ -96,6 +106,11 @@ class Player(pygame.sprite.Sprite):
             for i in pygame.sprite.spritecollide(self,group,dokill=False):
                 print("killed")
                 i.kill()
+                self.rect = self.image.get_rect(center = (200,700))
+                self.dead = True
+                self.time2 = pygame.time.get_ticks()
+                self.lives -= 1
+                
             
 
 class Bullet(pygame.sprite.Sprite):
