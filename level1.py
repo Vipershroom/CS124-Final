@@ -5,7 +5,7 @@ import random
 def level1(screen: pygame.Surface):
 
     """
-    Loads the scene for level 1, with both game loop and resources.
+    Loads and manages the scene for level 1, with both game loop and resources.
     """
     
     clock = pygame.time.Clock()
@@ -123,12 +123,11 @@ def level1(screen: pygame.Surface):
             wave3_time = True
 
         if time1 >= 3500:
-            # game over
-            pass
+            return "Scores"
         print(player.sprite.lives)
         if player.sprite.lives <= 0:
             clock = pygame.time.Clock()
-            return "Menu"
+            return "Scores"
             
         
         pygame.display.update()

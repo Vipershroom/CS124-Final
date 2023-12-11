@@ -3,6 +3,9 @@ from variables import *
 from sprites import *
 
 def MainMenu(screen):
+    """
+    Function responsible for loading and handling the main menu
+    """
 
     # Main menu
     clock = pygame.time.Clock()

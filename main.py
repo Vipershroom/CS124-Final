@@ -7,7 +7,9 @@ screen = pygame.display.set_mode(window)
 # Default Scene 
 scene_tag = "Start"
 
-# Transition scene5
+"""
+Global game loop
+"""
 while True:
     current_scene = scene_manager(screen, scene_tag)
     scene_tag = current_scene

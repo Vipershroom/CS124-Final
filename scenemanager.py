@@ -3,7 +3,9 @@ from mainmenu import MainMenu
 from level1 import level1
 
 def scene_manager(scene: pygame.Surface, new_scene: str):
-    
+    """
+    Function responsible for switching between scenes
+    """
     # Clear the scene
     scene.fill(pygame.Color("Black"))
 
