@@ -13,7 +13,7 @@ def MainMenu(screen):
     # Initialize background
     bg = pygame.transform.scale(pygame.image.load('assets/background/shrine.png'), window).convert()
     font = pygame.font.SysFont('MS Mincho', 50)
-    text = font.render('Game Title', False, 'White')
+    text = font.render('PyTouhou', False, 'White')
     menu_buttons = pygame.sprite.Group()
 
     # Add buttons to Sprite Group

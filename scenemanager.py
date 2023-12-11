@@ -3,7 +3,7 @@ from mainmenu import MainMenu
 from level1 import level1
 from scores import Score
 
-def scene_manager(scene: pygame.Surface, new_scene: str, score=0):
+def scene_manager(scene: pygame.Surface, new_scene: str):
     """
     Function responsible for switching between scenes
     """

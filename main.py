@@ -12,5 +12,5 @@ scene_tag = "Menu"
 Global game loop
 """
 while True:
-    current_scene = scene_manager(screen, scene_tag, score)
+    current_scene = scene_manager(screen, scene_tag)
     scene_tag = current_scene
