@@ -47,31 +47,54 @@ class Player(pygame.sprite.Sprite):
         self.time1 = 0
         self.time2 = 0
         self.lives = 3
+        self.top = False
+        self.bottom = False
+        self.right = False
+        self.left = False
+        self.invinc = False
         
     
     def move(self, group):
         self.velX = 0
         self.velY = 0
-        if self.left_pressed and not self.right_pressed:
+        if self.left_pressed and not self.right_pressed and not self.left:
             self.velX = -self.speed
-        if self.right_pressed and not self.left_pressed:
+        if self.right_pressed and not self.left_pressed and not self.right:
             self.velX = self.speed
-        if self.up_pressed and not self.down_pressed:
+        if self.up_pressed and not self.down_pressed and not self.top:
             self.velY = -self.speed
-        if self.down_pressed and not self.up_pressed:
+        if self.down_pressed and not self.up_pressed and not self.bottom:
             self.velY = self.speed
         
         self.rect.x += self.velX
         self.rect.y += self.velY
         self.rect = self.image.get_rect(center=self.rect.center)
         self.time1 = pygame.time.get_ticks()
-        # print(self.time1 - self.time2)
+        
+        print(self.rect.y)
+
         self.die(group)
         if self.dead and self.time1 - self.time2 > 500:
             print(self.time1 - self.time2)
             self.dead = False
             print(self.dead)
-
+        
+        if self.rect.y <= 0:
+            self.top = True
+        else:
+            self.top == False
+        if self.rect.y >= 800 - 70:
+            self.bottom = True
+        else: 
+            self.bottom = False
+        if self.rect.x >= 700 - 50:
+            self.right = True
+        else:
+            self.right = False
+        if self.rect.x <= 0:
+            self.left = True
+        else:
+            self.left = False
 
     
     def idle_animation(self):
@@ -102,14 +125,17 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(center=self.rect.center)
     
     def die(self, group):
-        if pygame.sprite.spritecollide(self,group,dokill=False):
-            for i in pygame.sprite.spritecollide(self,group,dokill=False):
-                print("killed")
-                i.kill()
-                self.rect = self.image.get_rect(center = (200,700))
-                self.dead = True
-                self.time2 = pygame.time.get_ticks()
-                self.lives -= 1
+        if not self.invinc:
+            if pygame.sprite.spritecollide(self,group,dokill=False):
+                for i in pygame.sprite.spritecollide(self,group,dokill=False):
+                    print("killed")
+                    i.kill()
+                    self.rect = self.image.get_rect(center = (200,700))
+                    self.dead = True
+                    self.time2 = pygame.time.get_ticks()
+                    self.lives -= 1
+                    self.invinc = True
+            
                 
             
 

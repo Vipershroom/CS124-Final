@@ -83,6 +83,7 @@ def level1(screen: pygame.Surface):
         
         if not player.sprite.dead:
             player.draw(screen)
+            player.sprite.invinc = False
         enemy.draw(screen)
         bullet_enemy.draw(screen)
         
@@ -109,7 +110,7 @@ def level1(screen: pygame.Surface):
 def wave1():
     grp = pygame.sprite.Group()
     for i in range(6):
-        grp.add(Enemy([(random.choice([10, 0, 25, 50, 25, 100, 150, 400, 500]),random.choice([0,0, 10, 25, 50, 100]))] + [(random.randrange(100,600), random.randrange(0,400))] + [(-50,-50)], i * 20 ))
+        grp.add(Enemy([(random.choice([10, 0, 25, 50, 25, 100, 150, 400, 500]),random.choice([0,0, 10, 25, 50, 100]))] + [(random.randrange(100,600), random.randrange(0,400)) for _ in range(4)] + [(-50,-50)], i * 20 ))
         # grp.add(Enemy([(100, 500)] + [(-50,-50)]))
         # grp.add(Enemy([(200, 600)] + [(-50,-50)]))
     return grp
