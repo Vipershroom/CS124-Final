@@ -70,19 +70,15 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velY
         self.rect = self.image.get_rect(center=self.rect.center)
         self.time1 = pygame.time.get_ticks()
-        
-        print(self.rect.y)
 
         self.die(group)
         if self.dead and self.time1 - self.time2 > 500:
-            print(self.time1 - self.time2)
             self.dead = False
-            print(self.dead)
         
         if self.rect.y <= 0:
             self.top = True
         else:
-            self.top == False
+            self.top = False
         if self.rect.y >= 800 - 70:
             self.bottom = True
         else: 
@@ -200,8 +196,6 @@ class Enemy(Player):
             if self.move_state < len(self.move_pattern) -1:
                     self.move_state += 1
 
-        # self.shoot(bullet_sprite, group_enemy_bullets)
-
         self.check_collide(group_player_bullets)
 
         if self.rect.x == -50 or self.rect.y == -50:
@@ -229,7 +223,6 @@ class Enemy(Player):
 
     def shoot(self,bullet_sprite, group):
         should_shoot_rand = random.randint(0,50)
-        # print(self.shoot_num)
         if int(self.shoot_num) == 1:
             if should_shoot_rand == 1:
                 group.add(Bullet(bullet_sprite,(self.rect.center[0],self.rect.center[1] - 48), len(group.sprites()) - 1,10,  -1))

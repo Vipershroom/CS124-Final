@@ -3,6 +3,10 @@ from variables import window
 from sprites import Player, Bullet, Enemy
 import random
 def level1(screen: pygame.Surface):
+
+    """
+    Loads the scene for level 1, with both game loop and resources.
+    """
     
     clock = pygame.time.Clock()
 
@@ -21,13 +25,17 @@ def level1(screen: pygame.Surface):
     Bullet(bullet_sprite,(player.sprite.rect.center[0],player.sprite.rect.center[1] - 48), len(bullets.sprites()) - 1)
     
     wave1_complete = False
-    wave2_complete = False
+    wave2_time = False
     wave3_complete = False
     player_dead = False
 
     enemy = wave1()
+    enemy2 = pygame.sprite.Group()
+
+    time1 = 0
 
     while True:
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -54,17 +62,6 @@ def level1(screen: pygame.Surface):
                 player.sprite.down_pressed = False
 
             
-            # if event.type == pygame.KEYUP:
-            #     if event.key == pygame.K_LEFT:
-            #         player.sprite.left_pressed = False
-            #     if event.key == pygame.K_RIGHT:
-            #         player.sprite.right_pressed = False
-            #     if event.key == pygame.K_UP:
-            #         player.sprite.up_pressed = False
-            #     if event.key == pygame.K_DOWN:
-            #         player.sprite.down_pressed = False
-
-            
         
         screen.blit(bg, (0,0))
         if player.sprite.right_pressed:
@@ -84,7 +81,6 @@ def level1(screen: pygame.Surface):
         if not player.sprite.dead:
             player.draw(screen)
             player.sprite.invinc = False
-        enemy.draw(screen)
         bullet_enemy.draw(screen)
         
         for bullet in bullets.sprites():
@@ -100,25 +96,37 @@ def level1(screen: pygame.Surface):
         
         for i in bullet_enemy.sprites():
             i.move()
+        enemy.draw(screen)
         
-        if player.sprite.lives == 0:
+        
+        
+        print(time1)
+        if time1 >= 500 and not wave2_time:
+            l = wave2()
+            for i in l:
+                enemy.add(i)
+            wave2_time = True
+            
+            wave2_time
+
+        print(player.sprite.lives)
+        if player.sprite.lives <= 0:
+            clock = pygame.time.Clock()
             return "Menu"
+            
 
         pygame.display.update()
+        time1 += 1
         clock.tick(60)
 
 def wave1():
     grp = pygame.sprite.Group()
     for i in range(6):
         grp.add(Enemy([(random.choice([10, 0, 25, 50, 25, 100, 150, 400, 500]),random.choice([0,0, 10, 25, 50, 100]))] + [(random.randrange(100,600), random.randrange(0,400)) for _ in range(4)] + [(-50,-50)], i * 20 ))
-        # grp.add(Enemy([(100, 500)] + [(-50,-50)]))
-        # grp.add(Enemy([(200, 600)] + [(-50,-50)]))
     return grp
 
 def wave2():
-    grp = pygame.sprite.Group()
-    for i in range(10):
-        grp.add(Enemy([(random.choice([10, 0, 25, 50, 25, 100, 150, 400, 500]),random.choice([0,0, 10, 25, 50, 100]))] + [(random.randrange(100,600), random.randrange(0,400))] + [(-50,-50)], i * 20 ))
-        # grp.add(Enemy([(100, 500)] + [(-50,-50)]))
-        # grp.add(Enemy([(200, 600)] + [(-50,-50)]))
+    grp = []
+    for i in range(16):
+        grp.append(Enemy([(random.choice([10, 0, 25, 50, 25, 100, 150, 400, 500]),random.choice([0,0, 10, 25, 50, 100]))] + [(random.randrange(100,600), random.randrange(0,400)) for _ in range(4)] + [(-50,-50)], i * 20 ))
     return grp
