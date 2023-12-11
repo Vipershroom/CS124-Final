@@ -1,6 +1,7 @@
 import pygame
 from math import sqrt
 import random
+
 class Player(pygame.sprite.Sprite):
     
     def parse_spritesheet_row(self, x,y, width, height, row):
@@ -39,7 +40,7 @@ class Player(pygame.sprite.Sprite):
         self.right_pressed = False
         self.up_pressed = False
         self.down_pressed = False
-        self.speed = 4
+        self.speed = 6
         self.x = 100
         self.y = 100
         self.current_sprite = 0
@@ -54,7 +55,7 @@ class Player(pygame.sprite.Sprite):
         self.invinc = False
         
     
-    def move(self, group):
+    def move(self, group, live_label):
         self.velX = 0
         self.velY = 0
         if self.left_pressed and not self.right_pressed and not self.left:
@@ -71,7 +72,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.rect.center)
         self.time1 = pygame.time.get_ticks()
 
-        self.die(group)
+        self.die(group, live_label)
         if self.dead and self.time1 - self.time2 > 500:
             self.dead = False
         
@@ -120,7 +121,7 @@ class Player(pygame.sprite.Sprite):
             self.current_sprite += .4
             self.rect = self.image.get_rect(center=self.rect.center)
     
-    def die(self, group):
+    def die(self, group, live_label):
         if not self.invinc:
             if pygame.sprite.spritecollide(self,group,dokill=False):
                 for i in pygame.sprite.spritecollide(self,group,dokill=False):
@@ -131,6 +132,7 @@ class Player(pygame.sprite.Sprite):
                     self.time2 = pygame.time.get_ticks()
                     self.lives -= 1
                     self.invinc = True
+                    live_label.redraw(-1)
             
                 
             
@@ -155,12 +157,12 @@ class Bullet(pygame.sprite.Sprite):
         
 
 class Enemy(Player):
-    def __init__(self,move=[], starty=0) -> None:
+    def __init__(self,move=[], starty=0, startx = -20) -> None:
         super().__init__()
         self.sprites_image = pygame.image.load('assets/player/enemy.png')
         self.sheet_parse = self.parse_spritesheet_row(0,0, 31,32,12)
         self.image = pygame.transform.scale(self.sheet_parse[0], (40,50)).convert_alpha()
-        self.rect = self.image.get_rect(center = (-20, starty))
+        self.rect = self.image.get_rect(center = (startx, starty))
         self.move_pattern = move
         self.move_state = 0
         self.complete_movement = True
@@ -169,7 +171,7 @@ class Enemy(Player):
         self.hp = 6
         self.shoot_num = 0
 
-    def move(self, group_player_bullets):
+    def move(self, group_player_bullets, score):
         x = self.move_pattern[self.move_state][0]
         y = self.move_pattern[self.move_state][1]
 
@@ -196,7 +198,7 @@ class Enemy(Player):
             if self.move_state < len(self.move_pattern) -1:
                     self.move_state += 1
 
-        self.check_collide(group_player_bullets)
+        self.check_collide(group_player_bullets, score)
 
         if self.rect.x == -50 or self.rect.y == -50:
             self.kill()
@@ -207,18 +209,19 @@ class Enemy(Player):
     def direction(self, x, y):
         return (x - self.rect.x , y - self.rect.y)
     
-    def check_collide(self,group):
+    def check_collide(self,group, score):
         if pygame.sprite.spritecollide(self,group,dokill=False):
             for i in pygame.sprite.spritecollide(self,group,dokill=False):
                 i.kill()
-            self.damage()
+            self.damage(score)
 
-    def damage(self):
+    def damage(self, score):
         self.hp -= 1
         if self.hp == 0:
-            self.death()
+            self.death(score)
 
-    def death(self):
+    def death(self, score):
+        score.redraw(1000)
         self.kill()
 
     def shoot(self,bullet_sprite, group):
@@ -251,3 +254,17 @@ class Button(pygame.sprite.Sprite):
         self.image = self.font.render(self.text, False, self.color)
     def Broadcast(self):
         return self.text
+    
+class Label(pygame.sprite.Sprite):
+    def __init__(self, text, num, ypos) -> None:
+        super().__init__()
+        self.num = num
+        self.text = text
+        self.color = "#f5f7fa"
+        self.font = pygame.font.SysFont('MS Mincho', 50) 
+        self.image = self.font.render(f"{self.text}: {self.num}", False, self.color)
+        self.rect = self.image.get_rect(center = (70,ypos))
+    
+    def redraw(self, new_num):
+        self.num += new_num
+        self.image = self.font.render(f"{self.text}: {self.num}", False, self.color)
