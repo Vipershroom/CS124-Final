@@ -1,5 +1,5 @@
 import pygame
-from variables import window
+import variables
 from sprites import Player, Bullet, Enemy, Label
 import random
 def level1(screen: pygame.Surface):
@@ -10,7 +10,7 @@ def level1(screen: pygame.Surface):
     
     clock = pygame.time.Clock()
 
-    bg = pygame.transform.scale(pygame.image.load('assets/background/sky.png'), window).convert()
+    bg = pygame.transform.scale(pygame.image.load('assets/background/sky.png'), variables.window).convert()
 
     player = pygame.sprite.GroupSingle()
     player.add(Player())
@@ -122,11 +122,12 @@ def level1(screen: pygame.Surface):
                 enemy.add(i)
             wave3_time = True
 
-        if time1 >= 3500:
+        if time1 >= 3000:
+            variables.score = score.sprite.num 
             return "Scores"
-        print(player.sprite.lives)
+        
         if player.sprite.lives <= 0:
-            clock = pygame.time.Clock()
+            variables.score = score.sprite.num
             return "Scores"
             
         

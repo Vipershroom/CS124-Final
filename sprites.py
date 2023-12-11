@@ -3,8 +3,17 @@ from math import sqrt
 import random
 
 class Player(pygame.sprite.Sprite):
+
+    """
+    Player class, handles movement, collision and shooting. As well as
+    rendering sprites and sprite sheets
+    """
     
     def parse_spritesheet_row(self, x,y, width, height, row):
+        
+        """
+        Parses sprite sheet by row
+        """
 
         sprite = pygame.Surface((width,height))
         sprite.set_colorkey((0,0,0))
@@ -19,6 +28,9 @@ class Player(pygame.sprite.Sprite):
         return [sprite] + self.parse_spritesheet_row(x + width, y, width, height, row -1)
     
     def get_full_spritesheet(self, x,y, width, height, row, col):
+        """
+        Gets the full 2D list of the sprite sheet images
+        """
         sprite_list = []
         adder = 0
         for _ in range(col):
@@ -56,6 +68,9 @@ class Player(pygame.sprite.Sprite):
         
     
     def move(self, group, live_label):
+        """
+        Handles player movement and interaction
+        """
         self.velX = 0
         self.velY = 0
         if self.left_pressed and not self.right_pressed and not self.left:
@@ -95,6 +110,9 @@ class Player(pygame.sprite.Sprite):
 
     
     def idle_animation(self):
+        """
+        Handles player idle animation
+        """
         if self.current_sprite >= 8:
             self.current_sprite = 0
         self.image = pygame.transform.scale(self.sprite_sheet[0][int(self.current_sprite)], (50,70)).convert_alpha()
@@ -102,6 +120,9 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def direction_change(self,dir):
+        """
+        Handles left and right animations for player
+        """
         if dir == "left":
             if self.current_sprite >= 7:
                 self.current_sprite = 7
@@ -122,6 +143,9 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(center=self.rect.center)
     
     def die(self, group, live_label):
+        """
+        Handles player death
+        """
         if not self.invinc:
             if pygame.sprite.spritecollide(self,group,dokill=False):
                 for i in pygame.sprite.spritecollide(self,group,dokill=False):
@@ -138,6 +162,11 @@ class Player(pygame.sprite.Sprite):
             
 
 class Bullet(pygame.sprite.Sprite):
+
+    """
+    Sprite class for the bullet object of both the enemy and player
+    """
+
     def __init__(self, asset,pos, type, speed=20, dir=1) -> None:
         super().__init__()
         self.image = asset.convert_alpha()
@@ -146,9 +175,17 @@ class Bullet(pygame.sprite.Sprite):
         self.type = type
 
     def draw(self, screen):
+        """
+        Draws the bullet to the screen
+        """
         screen.blit(self.image, self.rect)
 
     def move(self):
+
+        """
+        Handles the bullets movement
+        """
+
         self.rect.y -= self.speed
         self.rect = self.image.get_rect(center=self.rect.center)
 
@@ -157,6 +194,12 @@ class Bullet(pygame.sprite.Sprite):
         
 
 class Enemy(Player):
+
+    """
+    Enemy class, inherits from player and handles movement, sprite sheet,
+    shooting and more.
+    """
+
     def __init__(self,move=[], starty=0, startx = -20) -> None:
         super().__init__()
         self.sprites_image = pygame.image.load('assets/player/enemy.png')
@@ -172,9 +215,12 @@ class Enemy(Player):
         self.shoot_num = 0
 
     def move(self, group_player_bullets, score):
+        """
+        Handles movement of the enemy sprite
+        """
         x = self.move_pattern[self.move_state][0]
         y = self.move_pattern[self.move_state][1]
-
+        
         pythad_dist = self.pythagoras_distance(x, y)
 
         if pythad_dist != 0:
@@ -204,27 +250,45 @@ class Enemy(Player):
             self.kill()
 
     def pythagoras_distance(self, x,y):
+        """
+        Returns the pythagoras distance between a point and the sprites location
+        """
         return sqrt((x - self.rect.x)**2 + (y - self.rect.y) ** 2)
     
     def direction(self, x, y):
+        """
+        Returns the direction of where the sprite needs to go
+        """
         return (x - self.rect.x , y - self.rect.y)
     
     def check_collide(self,group, score):
+        """
+        Checks collision between the enemy sprite and the bullet
+        """
         if pygame.sprite.spritecollide(self,group,dokill=False):
             for i in pygame.sprite.spritecollide(self,group,dokill=False):
                 i.kill()
             self.damage(score)
 
     def damage(self, score):
+        """
+        Handles how the enemies take damage
+        """
         self.hp -= 1
         if self.hp == 0:
             self.death(score)
 
     def death(self, score):
+        """
+        Handles enemy death
+        """
         score.redraw(1000)
         self.kill()
 
     def shoot(self,bullet_sprite, group):
+        """
+        Handles enemy shooting
+        """
         should_shoot_rand = random.randint(0,50)
         if int(self.shoot_num) == 1:
             if should_shoot_rand == 1:
@@ -237,6 +301,10 @@ class Enemy(Player):
 
 class Button(pygame.sprite.Sprite):
 
+    """
+    Button class for the main menu and score
+    """
+
     def __init__(self, text, pos) -> None:
         super().__init__()
         self.color = "#454647"
@@ -247,15 +315,29 @@ class Button(pygame.sprite.Sprite):
         self.active = False
 
     def redraw(self):
+        """
+        Redraws the buttons to update their state
+        """
         if self.active:
             self.color = "#f5f7fa"
         else:
             self.color = "#454647"
         self.image = self.font.render(self.text, False, self.color)
+
     def Broadcast(self):
+        """
+        Returns a string to tell what button type it is for 
+        later logic.
+        """
         return self.text
     
 class Label(pygame.sprite.Sprite):
+
+    """
+    Label class that inherits from Button, 
+    used for UI elements like lives and score.
+    """
+
     def __init__(self, text, num, ypos) -> None:
         super().__init__()
         self.num = num
@@ -266,5 +348,8 @@ class Label(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = (70,ypos))
     
     def redraw(self, new_num):
+        """
+        Redraws the label to update its state
+        """
         self.num += new_num
         self.image = self.font.render(f"{self.text}: {self.num}", False, self.color)
